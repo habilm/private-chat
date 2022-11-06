@@ -12,7 +12,14 @@ wss.on( "connection", function( ws ){
 
     wss.clients.forEach( client => {
         if( 1 ){
-            client.send( JSON.stringify( { peers, ...{ type: "peers" } } ) )
+            let {id, name, avatar } = peers
+            client.send( JSON.stringify( { peers: peers.map( v => {
+                return {
+                    id: v.id,
+                    name : v.name,
+                    avatar: v.avatar
+                }
+            } ) , ...{ type: "peers" } } ) )
         }
         
     } )
@@ -22,11 +29,19 @@ wss.on( "connection", function( ws ){
         try{
             let message = JSON.parse(data)
             console.log( message )
+            
             if( message.type == "join" ){
                 let mathRand = Math.random();
                 let rand = parseInt( mathRand * 10 )
                 let id  = parseInt( mathRand* 10000);
-                peers.push( {...avatars[ rand ], ...{id} } );
+               
+                let oldIndex =peers.findIndex( v => v.ws == ws );
+                
+                if( oldIndex >= 0 ){
+                    delete peers[oldIndex]
+                }
+
+                peers.push( {...avatars[ rand ], ...{id, ws} } );
                 
                 ws.send( JSON.stringify( {...avatars[ rand ], ...{id,type:"accept"}} ) )
             }else if( message.type == "reJoin") {
@@ -36,7 +51,14 @@ wss.on( "connection", function( ws ){
                     let mathRand = Math.random();
                     let rand = parseInt( mathRand * 10 )
                     let id  = parseInt( mathRand* 10000);
-                    peers.push( {...avatars[ rand ], ...{id} } );
+
+                    let oldIndex =peers.findIndex( v => v.ws == ws );
+                    console.log( oldIndex )
+                    if( oldIndex >= 0 ){
+                        delete peers[oldIndex]
+                    }
+
+                    peers.push( {...avatars[ rand ], ...{id, ws} } );
                     ws.send( JSON.stringify({user, ...{id,type:"accept"} }) );
                 }else{
                     ws.send( JSON.stringify({user, ...{id:message.id,type:"accept"} }) );
