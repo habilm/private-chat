@@ -1,5 +1,5 @@
 
-const ChatScreen = ( ) =>{
+const Footers = ( ) =>{
     return (<div>
         <div className="row border-b-1 py-3" style={{backgroundColor: "#3a3a3a" }}>
             <div className="col-6">Super</div>
@@ -9,4 +9,4 @@ const ChatScreen = ( ) =>{
         </div>
     </div>)
 }
-export default ChatScreen
+export default Footers
