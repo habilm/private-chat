@@ -1,7 +1,7 @@
 
 const ChatScreen = ( {peers}) =>{
 
-console.log( peers , "<<PEERs" )
+console.log( peers , "PEERs" )
     return (
         <div className="w-100" >
             { peers.map( ( item ) => {
