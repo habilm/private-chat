@@ -4,7 +4,7 @@ import UsersList from './usersList';
 import ChatScreen from './ChatScreen'; 
 import Footer from './Footer'; 
 
-let wsc = new WebSocket("ws://192.168.70.232:2212")
+let wsc = new WebSocket("ws://192.168.70.81:2212")
 
 wsc.addEventListener("open", (e) =>{
   console.log("open")
@@ -21,7 +21,7 @@ wsc.addEventListener("open", (e) =>{
 
 const Main = ()=>{
     let [ peers, setPeers ] = useState( [] );
-    let [ userName, setUserName ] = useState( "" );
+    let [ currentUser, setCurrentUser ] = useState( {});
     useEffect( () => {
         
         
@@ -33,7 +33,7 @@ const Main = ()=>{
             if(dataObj.type === "accept" ){
               console.log( dataObj.id , typeof dataObj.id, "<<ID" )
               localStorage.setItem( "peerID", dataObj.id )
-              setUserName(dataObj?.user?.name)
+              setCurrentUser(dataObj?.data)
             }else if( dataObj.type === "peers" ){
               setPeers( dataObj.peers )
             }
@@ -48,7 +48,7 @@ const Main = ()=>{
   
 
     return(  <>
-    <Header />
+    <Header user={currentUser} />
 <div className='container-fluid'>
 <div className='row' style={{height:'calc(100vh - 56px)'}}>
   <div className='col-4 h-100 p-1 pe-0'>
@@ -56,7 +56,7 @@ const Main = ()=>{
   </div>
   <div className='col-8  h-100 bg-success'>
   
-<ChatScreen userName={userName} />
+<ChatScreen  />
   </div>
   </div>
 </div>

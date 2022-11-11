@@ -10,16 +10,16 @@ let peers = [];
 
 wss.on( "connection", function( ws ){
 
-    function sendPears(){
+    function sendPears(all = true){
         wss.clients.forEach( client => {
-            console.log(client != ws)
-                client.send( JSON.stringify( { peers:pearsData.map( v => {
-                    return {
-                        id: v.id,
-                        name : v.name,
-                        avatar: v.avatar
-                    }
-                } ) , ...{ type: "peers" } } ) )
+        
+            client.send( JSON.stringify( { peers:peers.map( v => {
+                return {
+                    id: v.id,
+                    name : v.name,
+                    avatar: v.avatar
+                }
+            } ) , ...{ type: "peers" } } ) )
             
             
         } )
@@ -46,13 +46,13 @@ wss.on( "connection", function( ws ){
                 // console.log( data , "<<created New")
                 peers.push( data );
                 
-                ws.send( JSON.stringify( {...avatars[ rand ], ...{id,type:"accept"}} ) )
+                ws.send( JSON.stringify( {data:avatars[ rand ], ...{id,type:"accept"}} ) )
                 sendPears()
             }else if( message.type == "reJoin") {
                 
                 console.log(peers)
 
-                let user = peers.find( v => v.id == message.id )
+                let user = peers.find( v => v!= null && v.id == message.id )
                 if( ! user ){
                     let mathRand = Math.random();
                     let rand = parseInt( mathRand * 10 )
@@ -67,9 +67,9 @@ wss.on( "connection", function( ws ){
                     let data = {...avatars[ rand ], ...{id, ws} } ;
                     
                     peers.push( data );
-                    ws.send( JSON.stringify({user, ...{id,type:"accept"} }) );
+                    ws.send( JSON.stringify({data, ...{id,type:"accept"} }) );
                 }else{
-                    ws.send( JSON.stringify({user, ...{id:message.id,type:"accept"} }) );
+                    ws.send( JSON.stringify({data:user, ...{id:message.id,type:"accept"} }) );
                 }
                 sendPears()
 
