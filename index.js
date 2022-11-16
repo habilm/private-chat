@@ -30,14 +30,14 @@ wss.on( "connection", function( ws ){
       
         try{
             let message = JSON.parse(data)
-            console.log( message )
+            console.log( message, "<< Back MEssge" )
             
             if( message.type == "join" ){
                 let mathRand = Math.random();
                 let rand = parseInt( mathRand * 10 )
                 let id  = parseInt( mathRand* 10000);
                
-                let oldIndex =peers.findIndex( v => v.ws = ws );
+                let oldIndex =peers.findIndex( v => v && ( v.ws = ws ) );
                 
                 if( oldIndex >= 0 ){
                     delete peers[oldIndex]

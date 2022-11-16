@@ -4,7 +4,7 @@ import UsersList from './usersList';
 import ChatScreen from './ChatScreen'; 
 import Footer from './Footer'; 
 
-let wsc = new WebSocket("ws://192.168.70.81:2212")
+let wsc = new WebSocket("ws://localhost:2212")
 
 wsc.addEventListener("open", (e) =>{
   console.log("open")
@@ -29,7 +29,8 @@ const Main = ()=>{
         wsc.addEventListener("message",function({data}){
           try{
             let dataObj = JSON.parse(  data );
-            console.log( dataObj)
+            console.log( dataObj , "<<message")
+          
             if(dataObj.type === "accept" ){
               console.log( dataObj.id , typeof dataObj.id, "<<ID" )
               localStorage.setItem( "peerID", dataObj.id )

@@ -5,7 +5,7 @@ console.log( peers , "PEERs" )
     return (
         <div className="w-100" >
             { peers.map( ( item ) => {
-                if( item == null ) return;
+                if( item == null ) return "";
             return (<a key={item.id} href="/" style={{borderBottom:"1px solid rgb(72 72 72) "}} className="d-flex ps-2 w-100 text-decoration-none align-items-center py-2">
                 <div className="" style={{width:"50px"}}>
                     <img alt="user" className="rounded-circle" style={{width: "50px", height:"50px"}} src={item?.avatar} />
